@@ -11,6 +11,37 @@ struct estado {
   int orientacion;
 };
 
+struct estadoCompleto : public estado {
+  private:
+  bool bikini, zapatillas;
+
+  void setParams(bool b, bool z) {
+    bikini = b;
+    zapatillas = z;
+  }
+
+  public:
+  explicit estadoCompleto(const estado & st) : estado(st) {
+    bikini = zapatillas = false;
+  }
+
+  bool hasBikini() const {
+    return bikini;
+  }
+
+  bool hasZapatillas() const {
+    return zapatillas;
+  }
+
+  void acquireBikini() {
+    setParams(true, false);
+  }
+
+  void acquireZapatillas() {
+    setParams(false, true);
+  }
+};
+
 class ComportamientoJugador : public Comportamiento {
   public:
     ComportamientoJugador(unsigned int size) : Comportamiento(size) {
@@ -41,10 +72,15 @@ class ComportamientoJugador : public Comportamiento {
     bool pathFinding(int level, const estado &origen, const list<estado> &destino, list<Action> &plan);
     bool pathFinding_Profundidad(const estado &origen, const estado &destino, list<Action> &plan);
     bool pathFinding_Anchura(const estado &origen, const estado &destino, list<Action> &plan);
-    bool pathFinding_A_Estrella(const estado &origen, const estado &destino, list<Action> &plan, const Sensores &sensores);
+    bool pathFinding_A_Estrella(const estado &origen, const estado &destino, list<Action> &plan, bool bikiniInicial, bool zapatillasInicial);
 
     void PintaPlan(list<Action> plan);
     bool HayObstaculoDelante(estado &st);
+
+    int calcularCoste(Action accion, const estado & st, bool bikini, bool zapatillas) const;
+    int calcularCoste(Action accion, const estadoCompleto & st) const;
+
+    void resolverItemsEspeciales(estadoCompleto & st);
 
 };
 
