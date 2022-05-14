@@ -34,7 +34,7 @@ Action ComportamientoJugador::think(Sensores sensores)
 	if(!hayPlan)
 		hayPlan = pathFinding(sensores.nivel, actual, objetivos, plan);
 
-	Action sigAccion;
+	Action sigAccion = actIDLE;
 	if(hayPlan and plan.size()>0){
 		sigAccion = plan.front();
 		plan.erase(plan.begin());
